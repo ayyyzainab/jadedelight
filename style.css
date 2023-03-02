@@ -1,0 +1,45 @@
+@charset "UTF-8";
+/* CSS Document */
+
+h1 
+{
+	text-align: center;
+	display: box;
+	background-color: #A63C63;
+	height: 100px;
+	margin: auto;
+	font-size: 75px;
+}
+
+html, body, div
+{
+	background-color: #F294AD;
+	display: block;
+  	margin-left: auto;
+  	margin-right: auto;
+  	width: 85%;	
+}
+
+h2 {
+	color: #732002;
+}
+
+.noodles {
+	float: right;
+  	margin-right: 0;
+  	width: 35%;
+	padding: 50px 0 0 0;
+
+}
+
+form, div {
+	padding: 10px;
+	color: #731414;
+	display: inline-block;
+	font-size: 25px;
+}
+
+input, select, radio {
+	font-size: 25px;
+}
+

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Jade Delight</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<script src="jquery-3.6.3.min.js"></script>
+	
+<script>
+		$(document).ready(function(){
+		  var radios = document.getElementsByName("p_or_d");
+		  for (var i = 0, length = radios.length; i < length; i++) {
+			radios[i].addEventListener("click", pickup_checked);
+		  }
+
+		  pickup_checked();
+			
+		  var costs = document.getElementsByName("cost");
+		  for (var i = 0, length = costs.length; i < length; i++) 
+		  {
+		  	var quans = document.getElementsByName("quan" + i);
+		  	for (var j = 0; j < quans.length; j++) 
+		  	{
+  				quans[j].addEventListener("change", calculate_total);
+		  	}		  
+		  }
+			
+		  var all_inputs = document.getElementsByTagName('input');
+          for (var i = 0; i < all_inputs.length; i++) 
+		  {
+          	if (all_inputs[i].type == "button") 
+			{
+            	all_inputs[i].addEventListener("click", validate_form);
+            }
+          }
+
+		})
+</script>
+</head>
+
+<body>
+<script>
+
+function MenuItem(name, cost)
+{
+	this.name = name;
+	this.cost=cost;
+}
+
+menuItems = new Array(
+	new MenuItem("Chicken Chop Suey", 5.5),
+	new MenuItem("Sweet and Sour Pork", 7.25),
+	new MenuItem("Shrimp Lo Mein", 6.80),
+	new MenuItem("Moo Shi Chicken", 9.50),
+	new MenuItem("Fried Rice", 3.25)
+);
+
+function makeSelect(name, minRange, maxRange)
+{
+	var t= "";
+	t = "<select name='" + name + "' size='1'>";
+	for (j=minRange; j<=maxRange; j++)
+	   t += "<option>" + j + "</option>";
+	t+= "</select>"; 
+	return t;
+}
+
+function td(content, className="")
+{
+	return "<td class = '" + className + "'>" + content + "</td>";
+}
+	
+</script>
+
+<h1>Jade Delight</h1>
+<form>
+	<script>
+		function pickup_checked() {
+			let checked_val = document.getElementsByName("p_or_d");
+			let delivery_items = document.getElementsByClassName("userInfo address");
+
+		  	for (let i = 0; i < checked_val.length; i++) 
+			{
+				if (checked_val[i].value === "pickup" && checked_val[i].checked) 
+					{
+			  			for (let j = 0; j < delivery_items.length; j++) 
+						{
+							$(delivery_items[j]).hide();
+			  			}
+					} 
+				else 
+					{
+			  			if (checked_val[i].value === "delivery" && checked_val[i].checked) 
+							{
+								for (let j = 0; j < delivery_items.length; j++) 
+								{
+				  					$(delivery_items[j]).show();
+			  					}
+			  				}
+					}
+		  }
+		}
+
+	</script>
+	
+<p class="userInfo"><label>First Name:</label> <input type="text"  name='fname' /></p>
+<p class="userInfo"><label>Last Name*:</label>  <input type="text"  name='lname' /></p>
+<p class="userInfo address"><label>Street*:</label> <input type="text" name='street' /></p>
+<p class="userInfo address"><label>City*:</label> <input type="text" name='city' /></p>
+<p class="userInfo"><label>Phone*:</label> <input type="text"  name='phone' /></p>
+<p> 
+	<input type="radio"  name="p_or_d" value = "pickup" checked="checked" />Pickup  
+	<input type="radio"  name='p_or_d' value = 'delivery' />
+	Delivery
+</p>
+<table border="0" cellpadding="3">
+  <tr>
+    <th>Select Item</th>
+    <th>Item Name</th>
+    <th>Cost Each</th>
+    <th>Total Cost</th>
+  </tr>
+<script>
+
+  var s = "";
+  for (i=0; i< menuItems.length; i++)
+  {
+	  s += "<tr>";
+	  s += td(makeSelect("quan" + i, 0, 10),"selectQuantity");
+	  s += td(menuItems[i].name, "itemName");
+	  s += td("$" +menuItems[i].cost.toFixed(2), "cost");
+	  s += td("$<input type='text' name='cost'/>" , "totalCost");
+	  s+= "</tr>";
+  }
+  document.writeln(s);
+</script>
+	
+</table>
+<p class="subtotal totalSection"><label>Subtotal</label>: 
+   $ <input type="text"  name='subtotal' id="subtotal" />
+</p>
+<p class="tax totalSection"><label>Mass tax 6.25%:</label>
+  $ <input type="text"  name='tax' id="tax" />
+</p>
+<p class="total totalSection"><label>Total:</label> $ <input type="text"  name='total' id="total" />
+</p>
+
+<input type = "button" value = "Submit Order" />
+
+</form>
+	
+	
+	<script>
+	function calculate_total() {
+		var totalCost = 0, subtotal = 0, massTax = 0, total = 0, itemQuantity=0, costEach = 0, itemTotal=0;
+
+		for (i = 0; i < menuItems.length; i++)
+  		{
+			itemQuantity = document.getElementsByName("quan" + i)[0].value;
+			costEach = menuItems[i].cost;
+			itemTotal = costEach * itemQuantity;
+
+			let total_input = document.getElementsByName("cost")[i]
+			total_input.value = itemTotal.toFixed(2);
+			
+			subtotal = (subtotal + itemTotal);
+			let subtotal_input = document.getElementById("subtotal")
+			subtotal_input.value = subtotal.toFixed(2);
+			
+			massTax = (subtotal * 0.0625);
+			let massTax_input = document.getElementById("tax")
+			massTax_input.value = massTax.toFixed(2);
+			
+			totalCost = (subtotal + massTax);
+			let totalCost_input = document.getElementById("total")
+			totalCost_input.value = totalCost.toFixed(2);
+  		}
+	}
+	
+		function validate_form() 
+		{
+			console.log("validating form...")
+			
+//			document.write("<p class = 'ordertime'> Your order will be ready in by </p>" );
+		}
+		
+	</script>
+<!--
+	<div id="pickupTime"></div>
+	<div id="deliveryTime"></div>
+-->
+
+
+	<script>
+	  var hour = 0, min = 0, currentTime=0;
+	  var d = new Date();
+	  hour = d.getHours();
+	  min = d.getMinutes();
+	  currentTime = hour + ":" + min;
+//	  document.getElementById("pickupTime").innerHTML = currentTime;
+	</script>
+
+	<img src="noodles.jpeg" alt="noodles" class="noodles">
+</body>
+</html>

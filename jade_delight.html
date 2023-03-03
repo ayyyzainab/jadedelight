@@ -12,6 +12,7 @@
 			radios[i].addEventListener("click", pickup_checked);
 		  }
 
+		  var delivery = false;
 		  pickup_checked();
 			
 		  var costs = document.getElementsByName("cost");
@@ -25,13 +26,15 @@
 		  }
 			
 		  var all_inputs = document.getElementsByTagName('input');
-          for (var i = 0; i < all_inputs.length; i++) 
+
+		  for (var i = 0; i < all_inputs.length; i++) 
 		  {
           	if (all_inputs[i].type == "button") 
 			{
             	all_inputs[i].addEventListener("click", validate_form);
             }
           }
+			
 
 		})
 </script>
@@ -82,6 +85,7 @@ function td(content, className="")
 			{
 				if (checked_val[i].value === "pickup" && checked_val[i].checked) 
 					{
+						delivery = false;
 			  			for (let j = 0; j < delivery_items.length; j++) 
 						{
 							$(delivery_items[j]).hide();
@@ -91,10 +95,12 @@ function td(content, className="")
 					{
 			  			if (checked_val[i].value === "delivery" && checked_val[i].checked) 
 							{
+								delivery = true;
 								for (let j = 0; j < delivery_items.length; j++) 
 								{
 				  					$(delivery_items[j]).show();
 			  					}
+								
 			  				}
 					}
 		  }
@@ -173,29 +179,80 @@ function td(content, className="")
 			totalCost = (subtotal + massTax);
 			let totalCost_input = document.getElementById("total")
 			totalCost_input.value = totalCost.toFixed(2);
+			
+			if (totalCost > 0) {
+				ordered = true;
+			}
   		}
 	}
 	
 		function validate_form() 
 		{
-			console.log("validating form...")
+			console.log("validating form...");
 			
-//			document.write("<p class = 'ordertime'> Your order will be ready in by </p>" );
+//			document.write("<p class = 'ordertime'> Your order will be ready by " + currentTime + "</p>" );
+
+			
+			var total = document.getElementById("total").value;
+			var lastname = document.getElementsByName("lname")[0].value;
+			var phone = document.getElementsByName("phone")[0].value;
+			var street = document.getElementsByName("street")[0].value;
+			var city = document.getElementsByName("city")[0].value;
+
+			
+			phonenum7 = new RegExp(/^\d{7}$/)
+			phonenum10 = new RegExp(/^\d{10}$/)
+
+
+			if (total == 0)
+				{
+					alert("Please select at least one item.");
+				}
+			else if(lastname == "")
+				{
+					alert("Please provide a last name.");
+				}
+			else if(!(phonenum7.test(phone) || phonenum10.test(phone)))
+				{
+					alert("Please provide a valid phone number.");
+				}
+//			else 
+//				{
+//					alert("Thank you for ordering!")
+//					alert("Your order will be ready for pickup by " + pickuptime);
+//					alert("Your order will be delivered by " + deliverytime);
+//				}
+			else if(delivery == true)
+				{
+					if (street == "") 
+					{
+						alert("Please provide a valid street.");
+					}
+					else if (city == "") 
+					{
+						alert("Please provide a valid city.");
+					}
+					else {
+						alert("Thank you for ordering!")
+					}
+				}
+			else 
+				{
+					alert("Thank you for ordering!")
+//					alert("Your order will be ready for pickup by " + pickuptime);
+//					alert("Your order will be delivered by " + deliverytime);
+				}
+			
 		}
 		
 	</script>
-<!--
-	<div id="pickupTime"></div>
-	<div id="deliveryTime"></div>
--->
-
-
 	<script>
-	  var hour = 0, min = 0, currentTime=0;
+	  var hour = 0, min = 0, pickuptime = 0, deliverytime = 0;
 	  var d = new Date();
 	  hour = d.getHours();
 	  min = d.getMinutes();
-	  currentTime = hour + ":" + min;
+	  pickuptime = hour + ":" + (min + 15);
+	  deliverytime = hour + ":" + (min + 45);
 //	  document.getElementById("pickupTime").innerHTML = currentTime;
 	</script>
 

@@ -9,6 +9,7 @@ h1
 	height: 100px;
 	margin: auto;
 	font-size: 75px;
+	border-radius: 15px;
 }
 
 html, body, div
@@ -43,3 +44,18 @@ input, select, radio {
 	font-size: 25px;
 }
 
+form input[type="text"] {
+	background:pink;
+	float: right;
+}
+
+select {
+	background: pink;
+}
+
+button {
+	color: pink;
+	margin: auto;
+	margin-left: auto;
+  	margin-right: auto;
+}

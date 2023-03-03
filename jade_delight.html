@@ -204,6 +204,18 @@ function td(content, className="")
 			phonenum10 = new RegExp(/^\d{10}$/)
 
 
+			function ordered_delivery() {
+				document.open();
+				document.write("<h1>Your order will be delivered by" + deliverytime "</h1");
+				document.close();
+      		}
+			
+			function ordered_pickup() {
+				document.open();
+				document.write("Your order will be ready for pickup by " + pickuptime);
+				document.close();
+      		}
+			
 			if (total == 0)
 				{
 					alert("Please select at least one item.");
@@ -216,12 +228,6 @@ function td(content, className="")
 				{
 					alert("Please provide a valid phone number.");
 				}
-//			else 
-//				{
-//					alert("Thank you for ordering!")
-//					alert("Your order will be ready for pickup by " + pickuptime);
-//					alert("Your order will be delivered by " + deliverytime);
-//				}
 			else if(delivery == true)
 				{
 					if (street == "") 
@@ -235,15 +241,14 @@ function td(content, className="")
 					else {
 						alert("Thank you for ordering!")
 						alert("Your order will be delivered by " + deliverytime);
-
+						ordered_delivery();
 					}
 				}
 			else 
 				{
 					alert("Thank you for ordering!")
-					alert("Your order will be ready for pickup by " + pickuptime);
+					ordered_pickup();
 				}
-			
 		}
 		
 	</script>
@@ -252,9 +257,13 @@ function td(content, className="")
 	  var d = new Date();
 	  hour = d.getHours();
 	  min = d.getMinutes();
+	  min = d.getMinutes();
+
+	  if (min > 59) {
+		  hour = hour + 1;
+	  }
 	  pickuptime = hour + ":" + (min + 15);
 	  deliverytime = hour + ":" + (min + 45);
-//	  document.getElementById("pickupTime").innerHTML = currentTime;
 	</script>
 
 	<img src="noodles.jpeg" alt="noodles" class="noodles">
